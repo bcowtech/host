@@ -26,14 +26,14 @@ func (m *HostModule) Init(service InjectionService) {
 	m.appService.RegisterConstructors(service)
 
 	// trigger Init()
-	m.hostService.Init(m.getHost(), m.appService.AppContext)
+	m.hostService.Init(m.getHost(), m.appService.AppContext())
 }
 
 func (m *HostModule) LoadConfiguration() {
 	m.appService.InitConfig()
 
 	if m.configureConfigurationAction != nil {
-		rvConfig := m.appService.Field(APP_CONFIG_FIELD)
+		rvConfig := m.appService.AppContext().Field(APP_CONFIG_FIELD)
 		service := config.NewConfigurationService(rvConfig.Interface())
 		m.configureConfigurationAction(service)
 	}
@@ -47,7 +47,7 @@ func (m *HostModule) LoadCompoent() {
 }
 
 func (m *HostModule) LoadMiddleware() {
-	appCtx := m.appService.AppContext
+	appCtx := m.appService.AppContext()
 	for _, v := range m.middlewares {
 		v.Init(appCtx)
 	}
@@ -55,7 +55,7 @@ func (m *HostModule) LoadMiddleware() {
 
 func (m *HostModule) Configure() {
 	if m.configureAction != nil {
-		rv := m.appService.Field(APP_CONFIG_FIELD)
+		rv := m.appService.AppContext().Field(APP_CONFIG_FIELD)
 		config := rv.Interface()
 		m.configureAction(config)
 	}
@@ -65,7 +65,7 @@ func (m *HostModule) InitComplete() {
 	m.appService.InitApp()
 
 	// trigger InitComplete()
-	m.hostService.InitComplete(m.getHost(), m.appService.AppContext)
+	m.hostService.InitComplete(m.getHost(), m.appService.AppContext())
 }
 
 func (m *HostModule) Start(ctx context.Context) {
@@ -87,7 +87,7 @@ func (m *HostModule) Stop(ctx context.Context) error {
 func (m *HostModule) getHost() Host {
 	if m.host == nil {
 		var (
-			rvHost          = m.appService.Field(APP_HOST_FIELD)
+			rvHost          = m.appService.AppContext().Field(APP_HOST_FIELD)
 			rvHostInterface = AppContextField(rvHost).As(m.hostService.GetHostType()).Value()
 			host            Host
 		)
