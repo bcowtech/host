@@ -19,7 +19,7 @@ type Starter struct {
 	hostModuleBuilder *HostModuleBuilder
 }
 
-func NewStarter(app interface{}, middlewares []Middleware) *Starter {
+func NewStarter(app interface{}) *Starter {
 	var (
 		appContext        = NewAppContext(app)
 		appService        = NewAppService(appContext)
@@ -28,11 +28,15 @@ func NewStarter(app interface{}, middlewares []Middleware) *Starter {
 
 	hostModuleBuilder.AppService(appService)
 	hostModuleBuilder.HostService(stdHostService)
-	hostModuleBuilder.Middlewares(middlewares)
 
 	return &Starter{
 		hostModuleBuilder: hostModuleBuilder,
 	}
+}
+
+func (s *Starter) Middlewares(middlewares ...Middleware) *Starter {
+	s.hostModuleBuilder.Middlewares(middlewares)
+	return s
 }
 
 func (s *Starter) ConfigureConfiguration(action ConfigureConfigurationAction) *Starter {

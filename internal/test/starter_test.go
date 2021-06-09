@@ -31,6 +31,7 @@ func Test(t *testing.T) {
 
 	app := MockApp{}
 	starter := host.Startup(&app).
+		Middlewares().
 		ConfigureConfiguration(func(service *config.ConfigurationService) {
 			service.
 				LoadEnvironmentVariables("").
