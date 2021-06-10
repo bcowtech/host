@@ -3,7 +3,7 @@ module github.com/bcowtech/host
 go 1.14
 
 require (
-	github.com/bcowtech/config v0.0.0-20210609061510-15d95376f435
+	github.com/bcowtech/config v0.0.0-20210610150253-9db2d96aa4da
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	go.uber.org/fx v1.13.1
 	go.uber.org/multierr v1.6.0 // indirect
