@@ -80,6 +80,7 @@ func (m *HostModule) Stop(ctx context.Context) error {
 	var (
 		host = m.getHost()
 	)
+	// FIXME see if all components are graceful shutdown or don't
 	m.componentService.Stop()
 	return host.Stop(ctx)
 }
