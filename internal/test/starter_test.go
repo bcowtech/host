@@ -12,7 +12,7 @@ import (
 	"github.com/bcowtech/host"
 )
 
-func Test(t *testing.T) {
+func TestStarter(t *testing.T) {
 	/* NOTE: panic: CryptAcquireContext: Provider DLL failed to initialize correctly.
 	 *
 	 * If the following commands applied, the CryptAcquireContext error will be occurred .
