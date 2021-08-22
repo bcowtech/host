@@ -2,8 +2,8 @@ package host
 
 import "github.com/bcowtech/host/internal"
 
-func Startup(app interface{}, middlewares ...Middleware) *Starter {
-	return internal.NewStarter(app, middlewares)
+func Startup(app interface{}) *Starter {
+	return internal.NewStarter(app)
 }
 
 func RegisterHostService(starter *Starter, service HostService) {

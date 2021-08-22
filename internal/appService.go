@@ -6,17 +6,17 @@ import (
 )
 
 type AppService struct {
-	*AppContext
+	ctx *AppContext
 }
 
 func NewAppService(appCtx *AppContext) *AppService {
 	return &AppService{
-		AppContext: appCtx,
+		ctx: appCtx,
 	}
 }
 
 func (s *AppService) RegisterConstructors(service InjectionService) error {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		configFieldGetter          = AppContextField(ctx.Field(APP_CONFIG_FIELD)).MakeGetter()
 		serviceProviderFieldGetter = AppContextField(ctx.Field(APP_SERVICE_PROVIDER_FIELD)).MakeGetter()
@@ -32,7 +32,7 @@ func (s *AppService) RegisterConstructors(service InjectionService) error {
 }
 
 func (s *AppService) RegisterComponents(service *ComponentService) {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		rvApp = ctx.rv
 	)
@@ -58,7 +58,7 @@ func (s *AppService) RegisterComponents(service *ComponentService) {
 }
 
 func (s *AppService) InitApp() {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		rvConfig = ctx.Field(APP_CONFIG_FIELD)
 		rvApp    = ctx.pv
@@ -85,7 +85,7 @@ func (s *AppService) InitApp() {
 }
 
 func (s *AppService) InitConfig() {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		rvConfig = ctx.Field(APP_CONFIG_FIELD)
 	)
@@ -109,7 +109,7 @@ func (s *AppService) InitConfig() {
 }
 
 func (s *AppService) InitHost() {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		rvConfig = ctx.Field(APP_CONFIG_FIELD)
 		rvHost   = ctx.Field(APP_HOST_FIELD)
@@ -138,7 +138,7 @@ func (s *AppService) InitHost() {
 }
 
 func (s *AppService) InitServiceProvider() {
-	ctx := s.AppContext
+	ctx := s.ctx
 	var (
 		rvConfig          = ctx.Field(APP_CONFIG_FIELD)
 		rvServiceProvider = ctx.Field(APP_SERVICE_PROVIDER_FIELD)
@@ -173,4 +173,8 @@ func (s *AppService) InitServiceProvider() {
 		}
 		fn.Call(args)
 	}
+}
+
+func (s *AppService) AppContext() *AppContext {
+	return s.ctx
 }

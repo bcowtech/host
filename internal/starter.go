@@ -3,7 +3,6 @@ package internal
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"go.uber.org/fx"
 )
@@ -19,7 +18,7 @@ type Starter struct {
 	hostModuleBuilder *HostModuleBuilder
 }
 
-func NewStarter(app interface{}, middlewares []Middleware) *Starter {
+func NewStarter(app interface{}) *Starter {
 	var (
 		appContext        = NewAppContext(app)
 		appService        = NewAppService(appContext)
@@ -28,11 +27,15 @@ func NewStarter(app interface{}, middlewares []Middleware) *Starter {
 
 	hostModuleBuilder.AppService(appService)
 	hostModuleBuilder.HostService(stdHostService)
-	hostModuleBuilder.Middlewares(middlewares)
 
 	return &Starter{
 		hostModuleBuilder: hostModuleBuilder,
 	}
+}
+
+func (s *Starter) Middlewares(middlewares ...Middleware) *Starter {
+	s.hostModuleBuilder.Middlewares(middlewares)
+	return s
 }
 
 func (s *Starter) ConfigureConfiguration(action ConfigureConfigurationAction) *Starter {
@@ -108,12 +111,12 @@ func (s *Starter) makeServiceHook(module *HostModule) interface{} {
 				OnStart: func(ctx context.Context) error {
 					go func() {
 						module.Start(ctx)
-						log.Println("[bcowtech/host] Started")
+						logger.Println("Started")
 					}()
 					return nil
 				},
 				OnStop: func(ctx context.Context) error {
-					log.Println("[bcowtech/host] Shutdown")
+					logger.Println("Shutdown")
 					return module.Stop(ctx)
 				},
 			},

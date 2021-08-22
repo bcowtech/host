@@ -2,22 +2,27 @@ package internal
 
 import (
 	"context"
+	"log"
+	"os"
 	"reflect"
 
 	"github.com/bcowtech/config"
-)
-
-var (
-	typeOfHost     = reflect.TypeOf((*Host)(nil)).Elem()
-	stdHostService = &StdHostService{}
 )
 
 const (
 	APP_HOST_FIELD             string = "Host"
 	APP_CONFIG_FIELD           string = "Config"
 	APP_SERVICE_PROVIDER_FIELD string = "ServiceProvider"
+	APP_COMPONENT_INIT_METHOD  string = "Init"
 
-	APP_COMPONENT_INIT_METHOD string = "Init"
+	LOGGER_PREFIX string = "[bcowtech/host] "
+)
+
+var (
+	typeOfHost     = reflect.TypeOf((*Host)(nil)).Elem()
+	stdHostService = &StdHostService{}
+
+	logger *log.Logger = log.New(os.Stdout, LOGGER_PREFIX, log.LstdFlags|log.Lmsgprefix)
 )
 
 type (
