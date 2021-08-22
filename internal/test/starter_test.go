@@ -77,16 +77,17 @@ func TestStarter(t *testing.T) {
 			fmt.Printf("the server listen at %s\n", conf.ListenAddress)
 		})
 
-	startCtx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	runCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
-	if err := starter.Start(startCtx); err != nil {
+	if err := starter.Start(runCtx); err != nil {
 		t.Error(err)
 	}
 
-	stopCtx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
-	if err := starter.Stop(stopCtx); err != nil {
-		t.Error(err)
+	select {
+	case <-runCtx.Done():
+		if err := starter.Stop(context.Background()); err != nil {
+			t.Error(err)
+		}
 	}
 
 	// assert app
